@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 load_dotenv()  
 
 def fetch_messages(channel_name):
-    client = WebClient(token=os.environ['SLACK_API_TOKEN'])
-
+    client = WebClient(token=os.environ['SLACK_BOT_TOKEN'])
+    
     channels = client.conversations_list()['channels']
 
     channel_id = None
