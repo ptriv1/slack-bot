@@ -1,4 +1,5 @@
 import os
+import json
 from datetime import datetime
 from slack_sdk import WebClient
 from dotenv import load_dotenv
@@ -23,15 +24,23 @@ if not channel_id:
 
 result = client.conversations_history(channel=channel_id)
 
-print(result)
+formatted_messages = []
 
-with open("messages.txt", "w") as file:
-    for message in result['messages']:
-        text = message.get('text', '[no text]')
-        ts = message.get('ts', None)
+for message in result['messages']:
+    text = message.get('text', '[no text]')
+    ts = message.get('ts', None)
+    user = message.get('user', '[unknown user]')
 
-        if ts:
-            readable_time = datetime.fromtimestamp(float(ts)).strftime('%Y-%m-%d %H:%M:%S')
-        else:
-            readable_time = '[no timestamp]'
-        file.write(f"[{readable_time}] {text}\n")
+    if ts:
+        readable_time = datetime.fromtimestamp(float(ts)).strftime('%Y-%m-%d %H:%M:%S')
+    else:
+        readable_time = '[no timestamp]'
+
+    formatted_messages.append({
+        "timestamp": readable_time,
+        "text": text,
+        "user": user
+    })
+
+with open("messages.json", "w") as file:
+    json.dump(formatted_messages, file, indent=2)
