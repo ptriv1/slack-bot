@@ -25,13 +25,13 @@ result = client.conversations_history(channel=channel_id)
 
 print(result)
 
-for message in result['messages']:
-    text = message.get('text', '[no text]')
-    ts = message.get('ts', None)
+with open("messages.txt", "w") as file:
+    for message in result['messages']:
+        text = message.get('text', '[no text]')
+        ts = message.get('ts', None)
 
-    if ts:
-        readable_time = datetime.fromtimestamp(float(ts)).strftime('%Y-%m-%d %H:%M:%S')
-    else:
-        readable_time = '[no timestamp]'
-
-    print(f"[{readable_time}] {text}")
+        if ts:
+            readable_time = datetime.fromtimestamp(float(ts)).strftime('%Y-%m-%d %H:%M:%S')
+        else:
+            readable_time = '[no timestamp]'
+        file.write(f"[{readable_time}] {text}\n")
