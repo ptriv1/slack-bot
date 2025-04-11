@@ -1,10 +1,10 @@
 import os
 from dotenv import load_dotenv
 from fetch_messages import fetch_messages
-import openai
+from openai import OpenAI
 
 load_dotenv()  
-openai.api_key = os.environ["OPENAI_API_KEY"]
+client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
 channel_name = input("Which channel do you want to search? ")
 messages = fetch_messages(channel_name)
@@ -19,13 +19,12 @@ def summarize_messages(messages):
         {"role": "system", "content": "You are a helpful assistant that summarizes Slack conversations."},
         {"role": "user", "content": f"Summarize the following Slack messages:\n\n{message_text}"}
     ]
-
-    response = openai.ChatCompletion.create(
-        model="gpt-4-turbo",  
-        messages=prompt
+    response = client.chat.completions.create(
+       model="gpt-4",
+       messages=prompt 
     )
 
-    summary = response["choices"][0]["message"]["content"]
+    summary = response.choices[0].message.content
     return summary
 
 summary = summarize_messages(messages)
