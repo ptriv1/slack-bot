@@ -1,5 +1,4 @@
 import os
-import json
 from datetime import datetime
 from slack_sdk import WebClient
 from dotenv import load_dotenv
