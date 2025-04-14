@@ -21,6 +21,11 @@ def fetch_messages(channel_name):
         return []
 
     result = client.conversations_history(channel=channel_id)
+
+    if not result['messages']:
+        print("No messages found in this channel.")
+        return []
+
     formatted_messages = []
 
     for message in result['messages']:
